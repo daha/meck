@@ -24,7 +24,7 @@ Example
 
 Here's an example of using meck in the Erlang shell:
 
-{% highlight erlang %}
+{% highlight erl %}
 Eshell V5.7.5  (abort with ^G)
 1> meck:new(dog).
 ok
