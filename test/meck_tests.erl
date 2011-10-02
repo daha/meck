@@ -295,18 +295,20 @@ history_meck_error_(Mod) ->
                  meck:history(Mod)).
 
 history_by_pid_(Mod) ->
-    ok = meck:expect(Mod, test, fun() -> ok end),
+    ok = meck:expect(Mod, test1, fun() -> ok end),
+    ok = meck:expect(Mod, test2, fun() -> ok end),
+
     TestPid = self(),
     Fun = fun() ->
-                  Mod:test(),
+                  Mod:test1(),
                   TestPid ! {self(), done}
           end,
     Pid = spawn(Fun),
-    Mod:test(),
-    Mod:test(),
-    ?assertEqual([{{Mod, test, []}, ok}], meck:history(Pid, Mod)),
-    ?assertEqual([{{Mod, test, []}, ok},
-                  {{Mod, test, []}, ok}], meck:history(TestPid, Mod)).
+    Mod:test1(),
+    Mod:test2(),
+    ?assertEqual([{{Mod, test1, []}, ok}], meck:history(Pid, Mod)),
+    ?assertEqual([{{Mod, test1, []}, ok},
+                  {{Mod, test2, []}, ok}], meck:history(TestPid, Mod)).
 
 history_with_pid_empty_(Mod) ->
     ?assertEqual([], meck:history_with_pid(Mod)).
